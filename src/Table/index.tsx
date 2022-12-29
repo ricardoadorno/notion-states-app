@@ -1,0 +1,7 @@
+export default () => {
+  return (
+    <section className="container mx-auto max-w-xl p-4 m-4 bg-gray-200 rounded">
+      <h2 className="text-2xl text-center">Tables</h2>
+    </section>
+  );
+};
