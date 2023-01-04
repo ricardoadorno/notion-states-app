@@ -19,7 +19,7 @@ function ToggleList() {
     <div className="flex flex-col gap-4 justify-start items-center">
       <button
         onClick={createNewToggle}
-        className="bg-teal-500 text-white p-2 m-4 rounded max-w-md "
+        className=" p-2 m-4 rounded max-w-md bg-cyan-500 hover:bg-cyan-700 border-cyan-500 hover:border-cyan-700 text-sm border-4 text-white py-1 px-2 "
       >
         Add Toggle
       </button>

@@ -3,18 +3,18 @@ import App from "../App";
 import { Link } from "react-router-dom";
 
 export default () => {
+  const createPageId = () => {
+    return `#${self.crypto.randomUUID()}`;
+  };
   // * All Pages
   const [pageList, setPageList] = useState([
-    { id: "1", title: "Page 1" },
-    { id: "2", title: "Page 2" },
+    { id: createPageId(), title: "Create New Pages!" },
   ]);
 
   // * Create a new page
   const [createNewPage, setCreateNewPage] = useState(false);
   const [inputNewPage, setInputNewPage] = useState("");
-  const createPageId = () => {
-    return `#${self.crypto.randomUUID()}`;
-  };
+
   const handleNewPageName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPageList([...pageList, { id: createPageId(), title: inputNewPage }]);
