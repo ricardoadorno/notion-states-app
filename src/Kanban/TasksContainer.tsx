@@ -1,8 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
-const TasksContainer = ({ setTasks, tasks }) => {
+type Tasks = {
+  [key: string]: {
+    items: {
+      id: string;
+      title: string;
+    }[];
+  };
+};
+
+const TasksContainer = ({
+  setTasks,
+  tasks,
+}: {
+  setTasks: any;
+  tasks: Tasks;
+}) => {
   const handleDragEnd = ({ destination, source }) => {
     // If the destination is not defined, return
     if (!destination) return;
@@ -29,14 +42,10 @@ const TasksContainer = ({ setTasks, tasks }) => {
     <div className="flex align-center justify-between min-h-full">
       <DragDropContext onDragEnd={handleDragEnd}>
         {Object.entries(tasks).map((task) => (
-          <div
-            className={`${task[1].title.toLowerCase()}__wrapper`}
-            key={task[1].title}
-          >
-            <h3>{task[1].title} Tasks</h3>
-
-            <div className={`${task[1].title.toLowerCase()}__container`}>
-              <Droppable droppableId={task[1].title}>
+          <div className={`${task[0].toLowerCase()}__wrapper`} key={task[0]}>
+            <h3>{task[0]} Tasks</h3>
+            <div className={`${task[0].toLowerCase()}__container`}>
+              <Droppable droppableId={task[0]}>
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {task[1].items.map((item, index) => (
@@ -50,7 +59,7 @@ const TasksContainer = ({ setTasks, tasks }) => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`${task[1].title.toLowerCase()}__items`}
+                            className={`${task[0].toLowerCase()}__items`}
                           >
                             <p>{item.title}</p>
                           </div>
