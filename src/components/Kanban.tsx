@@ -70,7 +70,6 @@ export default function Kanban() {
   }
 
   function handleDragOver(event) {
-    console.log(event);
     const { active, over, activatorEvent } = event;
     const { id } = active;
     const { id: overId } = over;

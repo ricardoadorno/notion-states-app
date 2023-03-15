@@ -3,124 +3,111 @@ import ReactMarkdown from "react-markdown";
 
 function MarkdownBlock() {
   const [markdownContent, setMarkdownContent] = useState("");
-
-  const [addMarkdownContent, setAddMarkdownContent] = useState(false);
-  const [editMarkdownContent, setEditMarkdownContent] = useState({
-    isEdit: false,
-    inputContent: "",
-    markdownType: "",
+  const [inputContent, setInputContent] = useState({
+    type: "",
+    content: "",
   });
-
-  function handleMarkdownSelect(e: React.ChangeEvent<HTMLSelectElement>) {
-    switch (e.target.value) {
-      case "normal":
-        setEditMarkdownContent({
-          isEdit: true,
-          inputContent: "",
-          markdownType: "",
-        });
-        break;
-      case "h1":
-        setEditMarkdownContent({
-          isEdit: true,
-          inputContent: "",
-          markdownType: "# ",
-        });
-        break;
-      case "blockquote":
-        setEditMarkdownContent({
-          isEdit: true,
-          inputContent: "",
-          markdownType: "> ",
-        });
-        break;
-      case "ordered-list":
-        setEditMarkdownContent({
-          isEdit: true,
-          inputContent: "",
-          markdownType: "1. ",
-        });
-        break;
-      case "unordered-list":
-        setEditMarkdownContent({
-          isEdit: true,
-          inputContent: "",
-          markdownType: "- ",
-        });
-        break;
-      case "horizontal-rule":
-        setMarkdownContent((prev) => prev + "---" + "\n");
-        break;
-
-      default:
-        break;
-    }
-    setAddMarkdownContent(false);
-  }
 
   return (
     <section>
       <h2>Markdown</h2>
+
       <ReactMarkdown children={markdownContent} />
 
       <div className="markdown">
-        <div
-          className="add-markdown"
-          onClick={() => setAddMarkdownContent(!addMarkdownContent)}
+        <form
+          className="input-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setMarkdownContent(
+              (prev) => prev + inputContent.type + inputContent.content + "\n"
+            );
+            setInputContent({ type: "", content: "" });
+          }}
         >
-          <i className="fas fa-pen"></i>
+          <input
+            type="text"
+            placeholder={inputContent.type}
+            onChange={(e) =>
+              setInputContent((prev) => {
+                return { ...prev, content: e.target.value };
+              })
+            }
+            value={inputContent.content}
+            onBlur={() => {
+              setMarkdownContent(
+                (prev) => prev + inputContent.type + inputContent.content + "\n"
+              );
+              setInputContent({ type: "", content: "" });
+            }}
+          />
+          <button className="btn-secondary" type="submit">
+            Submit
+          </button>
+        </form>
+
+        <div className="btn-group">
+          <button onClick={() => setInputContent({ type: "", content: "" })}>
+            Clear
+          </button>
+          <button
+            onClick={() =>
+              setInputContent((prev) => {
+                return { ...prev, type: "# " };
+              })
+            }
+          >
+            Header 1
+          </button>
+          <button
+            onClick={() =>
+              setInputContent((prev) => {
+                return { ...prev, type: "## " };
+              })
+            }
+          >
+            Header 2
+          </button>
+          <button
+            onClick={() =>
+              setInputContent((prev) => {
+                return { ...prev, type: "### " };
+              })
+            }
+          >
+            Header 3
+          </button>
+          <button
+            onClick={() =>
+              setInputContent((prev) => {
+                return { ...prev, type: "- " };
+              })
+            }
+          >
+            Unordered list
+          </button>
+          <button
+            onClick={() =>
+              setInputContent((prev) => {
+                return { ...prev, type: "1. " };
+              })
+            }
+          >
+            Ordered list
+          </button>
+          <button
+            onClick={() =>
+              setInputContent((prev) => {
+                return { ...prev, type: "> " };
+              })
+            }
+          >
+            Blockquote
+          </button>
+          <button onClick={() => setMarkdownContent((prev) => prev + "--- \n")}>
+            Horizontal rule
+          </button>
         </div>
-
-        {addMarkdownContent && (
-          <div>
-            <select onChange={(e) => handleMarkdownSelect(e)}>
-              <option value="" disabled selected>
-                Select a text type
-              </option>
-              <option value="normal">Normal text</option>
-              <option value="h1">Header 1</option>
-              <option value="blockquote">Blockquote</option>
-              <option value="ordered-list">Ordered list</option>
-              <option value="unordered-list">Unordered list</option>
-              <option value="horizontal-rule">Horizontal rule</option>
-            </select>
-          </div>
-        )}
-
-        {editMarkdownContent.isEdit && (
-          <form>
-            <input
-              type="text"
-              onChange={(e) => {
-                setEditMarkdownContent((prev) => {
-                  return {
-                    ...prev,
-                    inputContent: e.target.value,
-                  };
-                });
-              }}
-              value={editMarkdownContent.inputContent}
-            />
-            <button
-              onClick={() => {
-                setMarkdownContent(
-                  (prev) =>
-                    prev +
-                    editMarkdownContent.markdownType +
-                    editMarkdownContent.inputContent +
-                    "\n"
-                );
-                setEditMarkdownContent({
-                  isEdit: false,
-                  inputContent: "",
-                  markdownType: "",
-                });
-              }}
-            >
-              Add
-            </button>
-          </form>
-        )}
       </div>
     </section>
   );
