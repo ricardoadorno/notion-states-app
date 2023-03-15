@@ -1,0 +1,72 @@
+h1 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 1rem;
+  text-align: center;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  color: $gray-300-color;
+}
+
+nav {
+  background-color: $secondary-500;
+  color: $background-color-light;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+button {
+  padding: 0.4rem 1.5rem;
+  border-radius: 0.5rem;
+
+  font-weight: 600;
+  background-color: $primary-700;
+  color: $white-color;
+  border: none;
+
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    background-color: $primary-500;
+  }
+}
+
+.btn-secondary {
+  background-color: $secondary-600;
+  color: $white-color;
+  &:hover {
+    background-color: $secondary-500;
+  }
+}
+
+input[type="text"] {
+  padding: 0.4rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: $gray-100-color;
+  border: 1px solid $gray-400-color;
+  font-size: 1rem;
+  font-weight: 600;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    background-color: $gray-200-color;
+  }
+}
+
+.divider {
+  margin: 2rem 0;
+  border-bottom: 1px solid $gray-700-color;
+}
+
+.ml-1 {
+  margin-left: 1rem;
+}
