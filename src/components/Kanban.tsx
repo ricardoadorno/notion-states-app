@@ -17,7 +17,7 @@ export default function Kanban() {
 
   return (
     <section>
-      <h2>Kanban</h2>
+      <h2 className="title">Kanban</h2>
       <div className="kanban">
         <div className="new-task-form">
           New Task:

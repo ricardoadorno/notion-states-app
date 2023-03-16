@@ -20,11 +20,11 @@ function ToDo() {
   const [displayDone, setDisplayDone] = useState(true);
 
   // AutoAnimate
-  const [parent] = useAutoAnimate(/* optional config */);
+  const [parent] = useAutoAnimate();
 
   return (
     <div className="todo">
-      <h2>ToDo</h2>
+      <h2 className="title">ToDo</h2>
 
       <form
         className="todo--form"

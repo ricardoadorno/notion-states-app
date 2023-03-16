@@ -10,10 +10,8 @@ function MarkdownBlock() {
 
   return (
     <section>
-      <h2>Markdown</h2>
-
+      <h2 className="title">Markdown</h2>
       <ReactMarkdown children={markdownContent} />
-
       <div className="markdown">
         <form
           className="input-form"

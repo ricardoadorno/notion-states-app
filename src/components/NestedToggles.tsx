@@ -31,7 +31,7 @@ export default function NestedToggles() {
 
   return (
     <section>
-      <h2>Nested Toggles</h2>
+      <h2 className="title">Nested Toggles</h2>
       <div className="nested-toggles">
         <div>
           <button className="btn-secondary" onClick={addNode}>

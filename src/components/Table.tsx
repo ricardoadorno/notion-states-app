@@ -16,25 +16,38 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 export default function Table() {
   const [isEditingHeader, setIsEditingHeader] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [parent] = useAutoAnimate();
 
-  const [rows, setRows] = useState([
+  interface RowType {
+    [key: string]: string;
+  }
+  const [rows, setRows] = useState<RowType[]>([
     { firstName: "John", lastName: "Doe" },
     { firstName: "Mary", lastName: "Moe" },
     { firstName: "July", lastName: "Dooley" },
   ]);
-  const [headers, setHeaders] = useState(["First Name", "Last Name"]);
+  const [headers, setHeaders] = useState<string[]>(["First Name", "Last Name"]);
+  const [editingHeader, setEditingHeader] = useState<string>("");
 
   const addRow = () => {
-    setRows([...rows, { firstName: "None", lastName: "None" }]);
+    setRows([
+      ...rows,
+      headers.reduce((acc, header) => {
+        acc[header] = "None";
+        return acc;
+      }, {} as RowType),
+    ]);
   };
 
   const addColumn = () => {
     setHeaders([...headers, `Column ${headers.length + 1}`]);
     setRows(
-      rows.map((row) => ({ ...row, [`column${headers.length + 1}`]: "" }))
+      rows.map((row) => ({ ...row, [`column${headers.length + 1}`]: "None" }))
     );
   };
 
@@ -50,26 +63,28 @@ export default function Table() {
 
   return (
     <section>
-      <h2>Table</h2>
+      <h2 className="title">Table</h2>
       <div className="container-table">
         <table>
           <thead>
-            <tr>
+            <tr ref={parent}>
               {headers.map((header) => (
                 <th
                   onClick={() => {
                     setIsEditingHeader(true);
+                    setEditingHeader(header);
                   }}
                   key={header}
                 >
                   {isEditingHeader ? (
                     <input
                       type="text"
-                      value={header}
-                      onChange={(e) =>
-                        updateHeader(headers.indexOf(header), e.target.value)
-                      }
-                      onBlur={() => setIsEditingHeader(false)}
+                      value={editingHeader}
+                      onChange={(e) => setEditingHeader(e.target.value)}
+                      onBlur={(e) => {
+                        updateHeader(headers.indexOf(header), e.target.value);
+                        setIsEditingHeader(false);
+                      }}
                     />
                   ) : (
                     header
@@ -78,7 +93,7 @@ export default function Table() {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody ref={parent}>
             {rows.map((row, index) => (
               <tr key={index}>
                 {Object.entries(row).map(([field, value]) => (
