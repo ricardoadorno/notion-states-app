@@ -1,0 +1,311 @@
+@import "variables";
+@import "ultilities";
+
+body {
+  background-color: $background-color;
+  font-family: "Exo", sans-serif;
+  line-height: 1.5;
+  font-size: 18px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: $background-color-light;
+  color: $gray-100-color;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+.todo {
+  .todo--header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    accent-color: $secondary-600;
+
+    .todo--header_done {
+      display: flex;
+      flex-direction: column;
+      text-align: end;
+      font-size: 1rem;
+
+      gap: 0.5rem;
+      font-weight: 500;
+      color: $gray-400-color;
+    }
+
+    input {
+      margin-right: 0.5rem;
+    }
+  }
+
+  .todo--form {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem auto;
+    max-width: 50%;
+  }
+
+  ul {
+    list-style: none;
+    padding: 2rem 1rem;
+    accent-color: $primary-600;
+    background-color: $background-color;
+    border-radius: 1rem;
+    box-shadow: 0 0 5px 0 $primary-900;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid $gray-400-color;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    i {
+      cursor: pointer;
+    }
+  }
+}
+
+.block-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem;
+  position: relative;
+  border-radius: 0.2rem;
+  transition: background-Color 0.3s ease-in-out;
+
+  .emoji-picker {
+    position: absolute;
+    top: 6rem;
+    z-index: 1;
+  }
+
+  .emoji {
+    font-size: 1.5rem;
+    cursor: pointer;
+    align-self: center;
+  }
+
+  .block-form {
+    align-self: center;
+    flex-grow: 4;
+
+    input {
+      width: 100%;
+      padding: 0;
+      color: $gray-100-color;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      word-wrap: break-word;
+    }
+  }
+
+  .block-text {
+    color: $gray-100-color;
+    margin: 0;
+    align-self: center;
+    flex-grow: 4;
+  }
+
+  .block-select {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: $gray-100-color;
+    cursor: pointer;
+    margin-bottom: 3rem;
+
+    option {
+      background-color: $background-color-light;
+      color: $white-color;
+    }
+  }
+}
+
+.pagination {
+  .page-list {
+    display: flex;
+    justify-content: space-between;
+    max-width: 80%;
+    margin: 1rem auto;
+    background-color: $background-color;
+    padding: 0.5rem 2rem;
+    border-radius: 1rem;
+
+    a {
+      margin: 0;
+      padding: 0;
+      color: $gray-100-color;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s ease-in-out;
+
+      &:hover {
+        color: $gray-400-color;
+      }
+    }
+
+    .edit-btn {
+      align-self: center;
+    }
+  }
+
+  .pagination-new-page {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    button {
+      margin: 0 auto;
+    }
+    form {
+      margin: 1rem auto;
+
+      button {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  form {
+    margin: 1rem auto;
+  }
+}
+
+.kanban {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .new-task-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem auto;
+    max-width: 50%;
+  }
+
+  .columns-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    .sortable-item {
+      padding: 1rem 0;
+      cursor: grab;
+      border-radius: 0.4rem;
+      box-shadow: 0 0 5px 0 $background-color;
+    }
+
+    .ToDo .sortable-item {
+      background-color: $error-700;
+    }
+
+    .Doing .sortable-item {
+      background-color: $primary-800;
+    }
+
+    .Done .sortable-item {
+      background-color: $success-700;
+    }
+  }
+}
+
+.markdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+
+  .input-form {
+    width: 100%;
+
+    input {
+      width: 50%;
+    }
+
+    button {
+      margin: 0 0.5rem;
+    }
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 1rem;
+  }
+}
+
+.nested-toggles {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    align-self: self-start;
+  }
+
+  .nested-toggles-list {
+    margin-left: 1rem;
+
+    .toggle-title {
+      margin: 1rem 0;
+      font-size: 1.5rem;
+
+      i {
+        margin-right: 0.5rem;
+        cursor: pointer;
+      }
+    }
+
+    .toggle-content {
+      margin: 1rem 0;
+    }
+
+    button {
+      margin: 0.5rem 0;
+    }
+  }
+}
+
+.container-table {
+  overflow-x: auto;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid $gray-700-color;
+    margin: 2rem 0;
+
+    th {
+      background-color: $secondary-600;
+      color: $white-color;
+      padding: 0.5rem;
+      text-align: left;
+    }
+    td {
+      padding: 0.5rem;
+      border-bottom: 1px solid $gray-700-color;
+    }
+  }
+}
