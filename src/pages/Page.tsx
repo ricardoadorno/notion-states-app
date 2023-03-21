@@ -20,20 +20,6 @@ function Page() {
       <p>You can go back using the house icon on the top</p>
 
       <h3>Create Mardown Block</h3>
-      <button
-        onClick={() => {
-          setContent((prev) => {
-            return (
-              <>
-                {prev}
-                <MarkdownBlock />
-              </>
-            );
-          });
-        }}
-      >
-        New
-      </button>
       {content}
     </div>
   );
