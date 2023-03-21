@@ -14,13 +14,11 @@
     "@dnd-kit/utilities": "^3.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@formkit/auto-animate": "^1.0.0-beta.6",
-    "@tanstack/react-table": "^8.7.9",
     "nanoid": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.8.1",
-    "react-table": "^7.8.0",
     "sass": "^1.58.3"
   },
   "devDependencies": {

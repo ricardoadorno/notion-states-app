@@ -9,9 +9,9 @@ export default function Kanban() {
   const [newTask, setNewTask] = useState("");
 
   const [items, setItems] = useState({
-    ToDo: ["1", "2", "3"],
-    Doing: ["4", "5", "6"],
-    Done: ["7", "8", "9"],
+    ToDo: ["Create new taks"],
+    Doing: ["Fixing bugs"],
+    Done: ["Learn React", "Finish Kanban"],
   });
   const [activeId, setActiveId] = useState();
 
@@ -54,7 +54,7 @@ export default function Kanban() {
     </section>
   );
 
-  function findContainer(id) {
+  function findContainer(id: string) {
     if (id in items) {
       return id;
     }
@@ -62,15 +62,19 @@ export default function Kanban() {
     return Object.keys(items).find((key) => items[key].includes(id));
   }
 
-  function handleDragStart(event) {
+  function handleDragStart(event: any) {
     const { active } = event;
     const { id } = active;
 
     setActiveId(id);
   }
 
-  function handleDragOver(event) {
-    const { active, over, activatorEvent } = event;
+  function handleDragOver(event: any) {
+    const {
+      active,
+      over,
+      activatorEvent,
+    }: { active: string; over: string; activatorEvent: string } = event;
     const { id } = active;
     const { id: overId } = over;
 

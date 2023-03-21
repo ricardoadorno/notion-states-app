@@ -19,9 +19,12 @@ import { CSS } from "@dnd-kit/utilities";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function Table() {
-  const [isEditingHeader, setIsEditingHeader] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [parent] = useAutoAnimate();
+  const [isEditingRow, setIsEditingRow] = useState(false);
+  const [editingHeader, setEditingHeader] = useState({
+    isEditing: false,
+    headerSelected: "",
+    editing: "",
+  });
 
   interface RowType {
     [key: string]: string;
@@ -32,7 +35,6 @@ export default function Table() {
     { firstName: "July", lastName: "Dooley" },
   ]);
   const [headers, setHeaders] = useState<string[]>(["First Name", "Last Name"]);
-  const [editingHeader, setEditingHeader] = useState<string>("");
 
   const addRow = () => {
     setRows([
@@ -61,6 +63,8 @@ export default function Table() {
     setHeaders(headers.map((header, i) => (i === index ? value : header)));
   };
 
+  const [parent] = useAutoAnimate();
+
   return (
     <section>
       <h2 className="title">Table</h2>
@@ -71,19 +75,31 @@ export default function Table() {
               {headers.map((header) => (
                 <th
                   onClick={() => {
-                    setIsEditingHeader(true);
-                    setEditingHeader(header);
+                    setEditingHeader({
+                      isEditing: true,
+                      headerSelected: header,
+                      editing: header,
+                    });
                   }}
                   key={header}
                 >
-                  {isEditingHeader ? (
+                  {editingHeader.isEditing &&
+                  editingHeader.headerSelected === header ? (
                     <input
                       type="text"
-                      value={editingHeader}
-                      onChange={(e) => setEditingHeader(e.target.value)}
+                      value={editingHeader.editing}
+                      onChange={(e) =>
+                        setEditingHeader({
+                          ...editingHeader,
+                          editing: e.target.value,
+                        })
+                      }
                       onBlur={(e) => {
                         updateHeader(headers.indexOf(header), e.target.value);
-                        setIsEditingHeader(false);
+                        setEditingHeader({
+                          ...editingHeader,
+                          isEditing: false,
+                        });
                       }}
                     />
                   ) : (
@@ -97,15 +113,15 @@ export default function Table() {
             {rows.map((row, index) => (
               <tr key={index}>
                 {Object.entries(row).map(([field, value]) => (
-                  <td onClick={() => setIsEditing(true)} key={field}>
-                    {isEditing ? (
+                  <td onClick={() => setIsEditingRow(true)} key={field}>
+                    {isEditingRow ? (
                       <input
                         type="text"
                         value={value}
                         onChange={(e) =>
                           updateRow(index, field, e.target.value)
                         }
-                        onBlur={() => setIsEditing(false)}
+                        onBlur={() => setIsEditingRow(false)}
                       />
                     ) : (
                       value

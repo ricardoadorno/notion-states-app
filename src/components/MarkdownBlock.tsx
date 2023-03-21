@@ -8,6 +8,23 @@ function MarkdownBlock() {
     content: "",
   });
 
+  function handleTypeDescription(type: string) {
+    switch (type) {
+      case "# ":
+        return "Header 1";
+      case "## ":
+        return "Header 2";
+      case "### ":
+        return "Header 3";
+      case "1. ":
+        return "Ordered List";
+      case "- ":
+        return "Unordered List";
+      default:
+        return " ";
+    }
+  }
+
   return (
     <section>
       <h2 className="title">Markdown</h2>
@@ -20,12 +37,12 @@ function MarkdownBlock() {
             setMarkdownContent(
               (prev) => prev + inputContent.type + inputContent.content + "\n"
             );
-            setInputContent({ type: "", content: "" });
+            setInputContent({ ...inputContent, content: "" });
           }}
         >
           <input
             type="text"
-            placeholder={inputContent.type}
+            placeholder={handleTypeDescription(inputContent.type)}
             onChange={(e) =>
               setInputContent((prev) => {
                 return { ...prev, content: e.target.value };
@@ -36,7 +53,7 @@ function MarkdownBlock() {
               setMarkdownContent(
                 (prev) => prev + inputContent.type + inputContent.content + "\n"
               );
-              setInputContent({ type: "", content: "" });
+              setInputContent({ ...inputContent, content: "" });
             }}
           />
           <button className="btn-secondary" type="submit">
@@ -46,7 +63,7 @@ function MarkdownBlock() {
 
         <div className="btn-group">
           <button onClick={() => setInputContent({ type: "", content: "" })}>
-            Clear
+            Normal Text
           </button>
           <button
             onClick={() =>
@@ -92,15 +109,6 @@ function MarkdownBlock() {
             }
           >
             Ordered list
-          </button>
-          <button
-            onClick={() =>
-              setInputContent((prev) => {
-                return { ...prev, type: "> " };
-              })
-            }
-          >
-            Blockquote
           </button>
           <button onClick={() => setMarkdownContent((prev) => prev + "--- \n")}>
             Horizontal rule

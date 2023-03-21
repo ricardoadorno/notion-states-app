@@ -9,19 +9,19 @@ import ToDo from "../components/ToDo";
 function Home() {
   return (
     <>
-      <Table />
+      <ToDo />
       <div className="divider" />
       <Kanban />
       <div className="divider" />
-      <ToDo />
+      <Table />
+      <div className="divider" />
+      <TextBlock />
       <div className="divider" />
       <NestedToggles />
       <div className="divider" />
       <Pagination />
       <div className="divider" />
       <MarkdownBlock />
-      <div className="divider" />
-      <TextBlock />
     </>
   );
 }
