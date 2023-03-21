@@ -1,18 +1,25 @@
-import { closestCorners, DndContext } from "@dnd-kit/core";
+// @ts-ignore
+import {
+  closestCorners,
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+} from "@dnd-kit/core";
 import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
 
-interface CardProps {
-  id: string;
-}
+type ItemMap = {
+  [key: string]: string[];
+};
 
 export default function Kanban() {
   const [newTask, setNewTask] = useState("");
 
-  const [items, setItems] = useState({
+  const [items, setItems] = useState<ItemMap>({
     ToDo: ["Create new taks"],
     Doing: ["Fixing bugs"],
     Done: ["Learn React", "Finish Kanban"],
@@ -51,23 +58,24 @@ export default function Kanban() {
     return Object.keys(items).find((key) => items[key].includes(id));
   }
 
-  function handleDragStart(event: any) {
+  function handleDragStart(event: DragStartEvent) {
     const { active } = event;
     const { id } = active;
+
+    const activeContainer = findContainer(id as string);
   }
 
-  function handleDragOver(event: any) {
-    const {
-      active,
-      over,
-      activatorEvent,
-    }: { active: any; over: any; activatorEvent: any } = event;
+  function handleDragOver(event: DragOverEvent) {
+    const { active, over, activatorEvent } = event;
     const { id } = active;
-    const { id: overId } = over;
+    // const { id: overId } = over;
+    const overId = over?.id;
+
+    console.log(event);
 
     // Find the containers
-    const activeContainer = findContainer(id);
-    const overContainer = findContainer(overId);
+    const activeContainer = findContainer(id as string);
+    const overContainer = findContainer(overId as string);
 
     if (
       !activeContainer ||
@@ -82,18 +90,16 @@ export default function Kanban() {
       const overItems = prev[overContainer];
 
       // Find the indexes for the items
-      const activeIndex = activeItems.indexOf(id);
-      const overIndex = overItems.indexOf(overId);
+      const activeIndex = activeItems.indexOf(id as string);
+      const overIndex = overItems.indexOf(overId as string);
 
       let newIndex;
-      if (overId in prev) {
+      if (overId && overId in prev) {
         // We're at the root droppable of a container
         newIndex = overItems.length + 1;
       } else {
         const isBelowLastItem =
-          over &&
-          overIndex === overItems.length - 1 &&
-          activatorEvent.offsetTop > over.rect.offsetTop + over.rect.height;
+          over && overIndex === overItems.length - 1 && over.rect.height;
 
         const modifier = isBelowLastItem ? 1 : 0;
 
@@ -114,13 +120,13 @@ export default function Kanban() {
     });
   }
 
-  function handleDragEnd(event: any): void {
+  function handleDragEnd(event: DragEndEvent): void {
     const { active, over } = event;
     const { id } = active;
-    const { id: overId } = over;
+    const overId = over?.id;
 
-    const activeContainer = findContainer(id);
-    const overContainer = findContainer(overId);
+    const activeContainer = findContainer(id as string);
+    const overContainer = findContainer(overId as string);
 
     if (
       !activeContainer ||
@@ -130,8 +136,8 @@ export default function Kanban() {
       return;
     }
 
-    const activeIndex = items[activeContainer].indexOf(active.id);
-    const overIndex = items[overContainer].indexOf(overId);
+    const activeIndex = items[activeContainer].indexOf(active.id as string);
+    const overIndex = items[overContainer].indexOf(overId as string);
 
     if (activeIndex !== overIndex) {
       setItems((items) => ({
@@ -165,7 +171,7 @@ function Container(props: { id: string; items: string[] }) {
   );
 }
 
-function SortableItem(props: CardProps) {
+function SortableItem(props: { id: string }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: props.id });
 
