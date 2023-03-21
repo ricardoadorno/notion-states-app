@@ -21,7 +21,7 @@ export default function TextBlock() {
     }
   }
 
-  // * Call Emonji Picker
+  // Call Emonji Picker
   const data = async () => {
     const response = await fetch(
       "https://cdn.jsdelivr.net/npm/@emoji-mart/data"
@@ -41,7 +41,6 @@ export default function TextBlock() {
         className="block-container"
         style={{ backgroundColor: `${currentType()}` }}
       >
-        {/* Select Emoji */}
         {emojiEdit.isEdit && (
           <div className="emoji-picker">
             <Picker
@@ -63,7 +62,6 @@ export default function TextBlock() {
           {emojiEdit.emoji}
         </div>
 
-        {/* Select text */}
         {blockState.isEdit ? (
           <form
             className="block-form"
@@ -93,7 +91,6 @@ export default function TextBlock() {
           </p>
         )}
 
-        {/* Select Type */}
         <select
           className="block-select"
           onChange={(e) =>

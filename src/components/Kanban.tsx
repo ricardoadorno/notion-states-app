@@ -5,6 +5,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
 
+interface CardProps {
+  id: string;
+}
+
 export default function Kanban() {
   const [newTask, setNewTask] = useState("");
 
@@ -13,31 +17,16 @@ export default function Kanban() {
     Doing: ["Fixing bugs"],
     Done: ["Learn React", "Finish Kanban"],
   });
-  const [activeId, setActiveId] = useState();
 
   return (
     <section>
       <h2 className="title">Kanban</h2>
       <div className="kanban">
-        <div className="new-task-form">
-          New Task:
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-          />
-          <button
-            className="btn-secondary"
-            onClick={() =>
-              setItems((items) => ({
-                ...items,
-                ToDo: [...items.ToDo, newTask],
-              }))
-            }
-          >
-            Add
-          </button>
-        </div>
+        <KanbanInput
+          newTask={newTask}
+          setNewTask={setNewTask}
+          setItems={setItems}
+        />
         <div className="columns-container">
           <DndContext
             collisionDetection={closestCorners}
@@ -65,8 +54,6 @@ export default function Kanban() {
   function handleDragStart(event: any) {
     const { active } = event;
     const { id } = active;
-
-    setActiveId(id);
   }
 
   function handleDragOver(event: any) {
@@ -74,7 +61,7 @@ export default function Kanban() {
       active,
       over,
       activatorEvent,
-    }: { active: string; over: string; activatorEvent: string } = event;
+    }: { active: any; over: any; activatorEvent: any } = event;
     const { id } = active;
     const { id: overId } = over;
 
@@ -127,7 +114,7 @@ export default function Kanban() {
     });
   }
 
-  function handleDragEnd(event) {
+  function handleDragEnd(event: any): void {
     const { active, over } = event;
     const { id } = active;
     const { id: overId } = over;
@@ -156,12 +143,10 @@ export default function Kanban() {
         ),
       }));
     }
-
-    setActiveId(null);
   }
 }
 
-function Container(props) {
+function Container(props: { id: string; items: string[] }) {
   const { id, items } = props;
 
   const { setNodeRef } = useDroppable({
@@ -180,7 +165,7 @@ function Container(props) {
   );
 }
 
-function SortableItem(props) {
+function SortableItem(props: CardProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: props.id });
 
@@ -202,6 +187,38 @@ function SortableItem(props) {
       {...listeners}
     >
       {props.id}
+    </div>
+  );
+}
+
+function KanbanInput({
+  newTask,
+  setNewTask,
+  setItems,
+}: {
+  newTask: string;
+  setNewTask: (newTask: string) => void;
+  setItems: (items: any) => void;
+}) {
+  return (
+    <div className="new-task-form">
+      New Task:
+      <input
+        type="text"
+        value={newTask}
+        onChange={(e) => setNewTask(e.target.value)}
+      />
+      <button
+        className="btn-secondary"
+        onClick={() =>
+          setItems((items: any) => ({
+            ...items,
+            ToDo: [...items.ToDo, newTask],
+          }))
+        }
+      >
+        Add
+      </button>
     </div>
   );
 }

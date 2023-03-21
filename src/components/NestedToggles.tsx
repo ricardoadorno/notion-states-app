@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { nanoid } from "nanoid";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
+interface NodeType {
+  id: string;
+  label: string;
+  content: string;
+  children: NodeType[];
+}
+
 export default function NestedToggles() {
-  const [nodes, setNodes] = useState([
+  const [nodes, setNodes] = useState<NodeType[]>([
     {
       id: "1",
       label: "Node 1",
@@ -44,14 +51,20 @@ export default function NestedToggles() {
   );
 }
 
-const Tree = ({ nodes, setNodes }) => {
+function Tree({
+  nodes,
+  setNodes,
+}: {
+  nodes: NodeType[];
+  setNodes: (nodes: NodeType[]) => void;
+}) {
   const [parent] = useAutoAnimate();
 
-  const [expandedNodes, setExpandedNodes] = useState([]);
-  const [editedNodeId, setEditedNodeId] = useState(null);
-  const [editedNodeIdC, setEditedNodeIdC] = useState(null);
+  const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
+  const [editedNodeId, setEditedNodeId] = useState<string | null>(null);
+  const [editedNodeIdC, setEditedNodeIdC] = useState<string | null>(null);
 
-  const toggleNode = (nodeId) => {
+  const toggleNode = (nodeId: string) => {
     setExpandedNodes((prevNodes) =>
       prevNodes.includes(nodeId)
         ? prevNodes.filter((id) => id !== nodeId)
@@ -59,7 +72,7 @@ const Tree = ({ nodes, setNodes }) => {
     );
   };
 
-  const addChild = (parentNode) => {
+  const addChild = (parentNode: NodeType) => {
     const newChild = {
       id: nanoid(),
       label: `New Node`,
@@ -91,8 +104,11 @@ const Tree = ({ nodes, setNodes }) => {
     setNodes(updatedNodes);
   };
 
-  const handleNodeLabelChange = (event, editedNode) => {
-    const updateNode = (node) => {
+  const handleNodeLabelChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    editedNode: NodeType
+  ) => {
+    const updateNode = (node: NodeType): NodeType => {
       if (node.id === editedNode.id) {
         return {
           ...node,
@@ -101,7 +117,7 @@ const Tree = ({ nodes, setNodes }) => {
       } else if (node.children) {
         return {
           ...node,
-          children: node.children.map((child) => updateNode(child)),
+          children: node.children.map((child: NodeType) => updateNode(child)),
         };
       } else {
         return node;
@@ -113,8 +129,11 @@ const Tree = ({ nodes, setNodes }) => {
     setNodes(updatedNodes);
   };
 
-  const handleNodeContentChange = (event, editedNode) => {
-    const updateNode = (node) => {
+  const handleNodeContentChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    editedNode: NodeType
+  ) => {
+    const updateNode = (node: NodeType): NodeType => {
       if (node.id === editedNode.id) {
         return {
           ...node,
@@ -123,7 +142,7 @@ const Tree = ({ nodes, setNodes }) => {
       } else if (node.children) {
         return {
           ...node,
-          children: node.children.map((child) => updateNode(child)),
+          children: node.children.map((child: NodeType) => updateNode(child)),
         };
       } else {
         return node;
@@ -135,7 +154,7 @@ const Tree = ({ nodes, setNodes }) => {
     setNodes(updatedNodes);
   };
 
-  const renderNode = (node) => {
+  const renderNode = (node: NodeType) => {
     const isExpanded = expandedNodes.includes(node.id);
     const isLabelEdited = editedNodeId === node.id;
     const isContentEdited = editedNodeIdC === node.id;
@@ -246,4 +265,4 @@ const Tree = ({ nodes, setNodes }) => {
       {nodes.map(renderNode)}
     </ul>
   );
-};
+}

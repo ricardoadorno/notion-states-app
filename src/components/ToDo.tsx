@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Tasks = {
@@ -19,7 +18,6 @@ function ToDo() {
   ]);
   const [displayDone, setDisplayDone] = useState(true);
 
-  // AutoAnimate
   const [parent] = useAutoAnimate();
 
   return (

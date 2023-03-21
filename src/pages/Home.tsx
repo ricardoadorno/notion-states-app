@@ -6,7 +6,7 @@ import Table from "../components/Table";
 import TextBlock from "../components/TextBlock";
 import ToDo from "../components/ToDo";
 
-function Home() {
+export default function Home() {
   return (
     <>
       <ToDo />
@@ -25,5 +25,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;

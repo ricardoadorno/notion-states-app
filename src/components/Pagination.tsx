@@ -1,14 +1,15 @@
 import React, { useState, useRef } from "react";
-import App from "../App";
+import { nanoid } from "nanoid";
 import { Link } from "react-router-dom";
 
 export default function Pagination() {
-  const createPageId = () => {
-    return `#${self.crypto.randomUUID()}`;
-  };
+  // make the input focus when the edit button is clicked
+  const inputRef = useRef<HTMLInputElement>(null);
+  const editInputRef = useRef<HTMLInputElement>(null);
+
   // * All Pages
   const [pageList, setPageList] = useState([
-    { id: createPageId(), title: "Create New Pages!" },
+    { id: nanoid(), title: "Create New Pages!" },
   ]);
 
   // * Create a new page
@@ -18,7 +19,7 @@ export default function Pagination() {
   const handleNewPageName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputNewPage) {
-      setPageList([...pageList, { id: createPageId(), title: inputNewPage }]);
+      setPageList([...pageList, { id: nanoid(), title: inputNewPage }]);
     }
     setCreateNewPage(false);
     setInputNewPage("");
@@ -39,16 +40,11 @@ export default function Pagination() {
     setInputEditTitle({ title: "", id: "" });
   };
 
-  // make the input focus when the edit button is clicked
-  const inputRef = useRef<HTMLInputElement>(null);
-  const editInputRef = useRef<HTMLInputElement>(null);
-
   return (
     <section>
       <h2>Pagination</h2>
 
       <div className="pagination">
-        {/* Page List */}
         {pageList.map((page) => (
           <div key={page.id}>
             <div className="page-list">
