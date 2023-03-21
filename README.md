@@ -16,6 +16,13 @@ Inpired by [Notion](https://www.notion.so/)
 - Pagination
 - Custom Table
 
+### Future Implementations
+
+- Refactor Componets
+- Make use of the local storage, to store the data
+- Add Tests using vite-tests
+- Make the Components reusable
+
 ## Technologies
 
 This project uses the following technologies:
