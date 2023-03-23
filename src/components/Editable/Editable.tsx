@@ -3,25 +3,24 @@ import ReactMarkdown from "react-markdown";
 import "./Editable.scss";
 
 export default function Editable() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState("WW");
-
+  const [input, setInput] = useState("");
   return (
     <section>
       <h2>Editable</h2>
 
-      <div className="editable-container">
-        <ReactMarkdown children={value} />
+      <ReactMarkdown children={input} />
 
+      <div className="editable-container">
         <div
           className="editable"
           spellCheck="true"
-          // data-text="Write something here..."
+          data-text="Write something here..."
           data-content-editable-leaf="true"
           contentEditable="true"
           style={{ outline: "none" }}
-          ref={ref}
-          onInput={(e) => setValue(e.currentTarget.innerText)}
+          onInput={(e) => {
+            setInput(e.currentTarget.innerText);
+          }}
         ></div>
       </div>
     </section>
