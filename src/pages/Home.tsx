@@ -1,3 +1,4 @@
+import Editable from "../components/Editable/Editable";
 import Kanban from "../components/Kanban";
 import MarkdownBlock from "../components/MarkdownBlock";
 import NestedToggles from "../components/NestedToggles";
@@ -9,6 +10,9 @@ import ToDo from "../components/ToDo";
 export default function Home() {
   return (
     <>
+      <Editable />
+      <div className="divider" />
+      <MarkdownBlock />
       <ToDo />
       <div className="divider" />
       <Kanban />
@@ -20,8 +24,6 @@ export default function Home() {
       <NestedToggles />
       <div className="divider" />
       <Pagination />
-      <div className="divider" />
-      <MarkdownBlock />
     </>
   );
 }
