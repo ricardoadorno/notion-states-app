@@ -2,12 +2,12 @@ import { ChangeEvent, useState } from "react";
 import { nanoid } from "nanoid";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-interface NodeType {
+type NodeType = {
   id: string;
   label: string;
   content: string;
   children: NodeType[];
-}
+};
 
 export default function NestedToggles() {
   const [nodes, setNodes] = useState<NodeType[]>([

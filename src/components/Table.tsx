@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-interface RowType {
+type RowType = {
   [key: string]: string;
-}
+};
 
 export default function Table() {
   const [parent] = useAutoAnimate();
