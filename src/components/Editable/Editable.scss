@@ -5,7 +5,29 @@
     content: attr(data-text);
     color: $gray-700-color;
   }
+}
 
-  .editable {
+.block {
+  padding: 0.5rem;
+
+  &[contentEditable="true"]:empty:not(:focus):before {
+    content: attr(data-text);
+    color: $gray-700-color;
+  }
+
+  outline: none;
+}
+
+.block_type-- {
+  &paragraph {
+    color: $gray-600-color;
+  }
+
+  &heading_one {
+    font-size: 3rem;
+  }
+
+  &heading_two {
+    font-size: 2rem;
   }
 }
