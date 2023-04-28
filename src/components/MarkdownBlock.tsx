@@ -1,122 +1,252 @@
+import {
+  useEditor,
+  EditorContent,
+  BubbleMenu,
+  FloatingMenu,
+} from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import TextStyle from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
+import Placeholder from "@tiptap/extension-placeholder";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
 
-function MarkdownBlock() {
-  const [markdownContent, setMarkdownContent] = useState("");
-  const [inputContent, setInputContent] = useState({
-    type: "",
-    content: "",
+export default function MarkdownBlock() {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+
+      TextStyle,
+      Color.configure({
+        types: ["textStyle"],
+      }),
+      Underline,
+      Highlight.configure({ multicolor: true }),
+      Placeholder.configure({
+        placeholder: "Write something …",
+      }),
+    ],
+
+    content: `<div>
+    <h1>Hello World!</h1>
+    <h3>Let's write some nice <span style='color: red'>text</span>!</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur placeat eius itaque minus quia error eaque dicta! Hic, optio dignissimos!</p>
+    </div>`,
   });
 
-  function handleTypeDescription(type: string) {
-    switch (type) {
-      case "# ":
-        return "Header 1";
-      case "## ":
-        return "Header 2";
-      case "### ":
-        return "Header 3";
-      case "1. ":
-        return "Ordered List";
-      case "- ":
-        return "Unordered List";
-      default:
-        return " ";
-    }
-  }
+  const [showMenuDisplay, setShowMenuDisplay] = useState(false);
 
   return (
-    <section>
-      <h2 className="title">Markdown</h2>
-      <ReactMarkdown children={markdownContent} />
-      <div className="markdown">
-        <form
-          className="input-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setMarkdownContent(
-              (prev) => prev + inputContent.type + inputContent.content + "\n"
-            );
-            setInputContent({ ...inputContent, content: "" });
-          }}
-        >
-          <input
-            type="text"
-            placeholder={handleTypeDescription(inputContent.type)}
-            onChange={(e) =>
-              setInputContent((prev) => {
-                return { ...prev, content: e.target.value };
-              })
-            }
-            value={inputContent.content}
-            onBlur={() => {
-              setMarkdownContent(
-                (prev) => prev + inputContent.type + inputContent.content + "\n"
-              );
-              setInputContent({ ...inputContent, content: "" });
-            }}
-          />
-          <button className="btn-secondary" type="submit">
-            Submit
-          </button>
-        </form>
+    <div className="text-editor__container">
+      <h2 className="title">Text Editor</h2>
 
-        <div className="btn-group">
-          <button onClick={() => setInputContent({ type: "", content: "" })}>
-            Normal Text
-          </button>
-          <button
-            onClick={() =>
-              setInputContent((prev) => {
-                return { ...prev, type: "# " };
-              })
+      <div>
+        {editor && <BubbleMenuDisplay editor={editor} />}
+        {editor && showMenuDisplay && (
+          <MenuDisplay
+            editor={editor}
+            setShowMenuDisplay={setShowMenuDisplay}
+          />
+        )}
+        <EditorContent
+          editor={editor}
+          onKeyDown={(e) => {
+            if (e.key === "/") {
+              e.preventDefault();
+              setShowMenuDisplay(true);
             }
-          >
-            Header 1
-          </button>
-          <button
-            onClick={() =>
-              setInputContent((prev) => {
-                return { ...prev, type: "## " };
-              })
-            }
-          >
-            Header 2
-          </button>
-          <button
-            onClick={() =>
-              setInputContent((prev) => {
-                return { ...prev, type: "### " };
-              })
-            }
-          >
-            Header 3
-          </button>
-          <button
-            onClick={() =>
-              setInputContent((prev) => {
-                return { ...prev, type: "- " };
-              })
-            }
-          >
-            Unordered list
-          </button>
-          <button
-            onClick={() =>
-              setInputContent((prev) => {
-                return { ...prev, type: "1. " };
-              })
-            }
-          >
-            Ordered list
-          </button>
-          <button onClick={() => setMarkdownContent((prev) => prev + "--- \n")}>
-            Horizontal rule
-          </button>
-        </div>
+          }}
+        />
       </div>
-    </section>
+    </div>
   );
 }
 
-export default MarkdownBlock;
+function MenuDisplay({ editor, setShowMenuDisplay }) {
+  if (!editor) {
+    return null;
+  }
+
+  return (
+    <div className="floating-menu">
+      <div className="bubble-menu__node-list">
+        <div
+          onClick={() => {
+            editor.chain().focus().setParagraph().run();
+            setShowMenuDisplay(false);
+          }}
+          className={editor.isActive("paragraph") ? "is-active" : ""}
+        >
+          text
+        </div>
+        <div
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive("bulletList") ? "is-active" : ""}
+        >
+          bullet list
+        </div>
+        <div
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editor.isActive("orderedList") ? "is-active" : ""}
+        >
+          ordered list
+        </div>
+        <div
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={editor.isActive("blockquote") ? "is-active" : ""}
+        >
+          blockquote
+        </div>
+        <div
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 1 }) ? "is-active" : ""
+          }
+        >
+          h1
+        </div>
+        <div
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+          }
+        >
+          h2
+        </div>
+        <div onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+          horizontal rule
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BubbleMenuDisplay({ editor }) {
+  if (!editor) {
+    return null;
+  }
+
+  const [showNodesMenu, setShowNodesMenu] = useState(false);
+
+  return (
+    <BubbleMenu
+      className="bubble-menu"
+      editor={editor}
+      tippyOptions={{ duration: 100 }}
+    >
+      <div
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`bubble-menu__button ${
+          editor.isActive("bold") ? "is-active" : ""
+        }`}
+      >
+        Bold
+      </div>
+      <div
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`bubble-menu__button ${
+          editor.isActive("italic") ? "is-active" : ""
+        }`}
+      >
+        Italic
+      </div>
+      <div
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={`bubble-menu__button ${
+          editor.isActive("underline") ? "is-active" : ""
+        }`}
+      >
+        Underline
+      </div>
+      <div
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        className={`bubble-menu__button ${
+          editor.isActive("strike") ? "is-active" : ""
+        }`}
+      >
+        Strike
+      </div>
+      <div
+        onClick={() =>
+          editor.chain().focus().toggleHighlight({ color: "#5b21b6" }).run()
+        }
+        className={`bubble-menu__button ${
+          editor.isActive("highlight") ? "is-active" : ""
+        }`}
+      >
+        Highlight
+      </div>
+
+      <select
+        onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+        className="bubble-menu__select"
+      >
+        <option value="white">White</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+      </select>
+
+      {/* NODES */}
+      <div
+        onClick={() => setShowNodesMenu(!showNodesMenu)}
+        className="bubble-menu__button"
+      >
+        Nodes
+        {showNodesMenu && (
+          <div className="bubble-menu__node-list">
+            <div
+              onClick={() => editor.chain().focus().setParagraph().run()}
+              className={editor.isActive("paragraph") ? "is-active" : ""}
+            >
+              text
+            </div>
+            <div
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              className={editor.isActive("bulletList") ? "is-active" : ""}
+            >
+              bullet list
+            </div>
+            <div
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              className={editor.isActive("orderedList") ? "is-active" : ""}
+            >
+              ordered list
+            </div>
+            <div
+              onClick={() => editor.chain().focus().toggleBlockquote().run()}
+              className={editor.isActive("blockquote") ? "is-active" : ""}
+            >
+              blockquote
+            </div>
+            <div
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              }
+              className={
+                editor.isActive("heading", { level: 1 }) ? "is-active" : ""
+              }
+            >
+              h1
+            </div>
+            <div
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
+              className={
+                editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+              }
+            >
+              h2
+            </div>
+          </div>
+        )}
+      </div>
+    </BubbleMenu>
+  );
+}
