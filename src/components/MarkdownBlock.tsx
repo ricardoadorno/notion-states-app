@@ -16,7 +16,7 @@ export default function MarkdownBlock() {
   const editor = useEditor({
     extensions: [
       StarterKit,
-
+      DraggableItem,
       TextStyle,
       Color.configure({
         types: ["textStyle"],
@@ -32,7 +32,15 @@ export default function MarkdownBlock() {
     <h1>Hello World!</h1>
     <h3>Let's write some nice <span style='color: red'>text</span>!</h3>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur placeat eius itaque minus quia error eaque dicta! Hic, optio dignissimos!</p>
-    </div>`,
+    </div>
+    <p>This is a boring paragraph.</p>
+    <div data-type="draggable-item">
+      <p>Followed by a fancy draggable item.</p>
+    </div>
+    <div data-type="draggable-item">
+      <p>And another draggable item.</p>      
+    </div>
+    `,
   });
 
   const [showMenuDisplay, setShowMenuDisplay] = useState(false);
@@ -248,5 +256,56 @@ function BubbleMenuDisplay({ editor }) {
         )}
       </div>
     </BubbleMenu>
+  );
+}
+
+import { mergeAttributes, Node } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+
+const DraggableItem = Node.create({
+  name: "draggableItem",
+
+  group: "block",
+
+  content: "block+",
+
+  draggable: true,
+
+  parseHTML() {
+    return [
+      {
+        tag: 'div[data-type="draggable-item"]',
+      },
+    ];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "div",
+      mergeAttributes(HTMLAttributes, { "data-type": "draggable-item" }),
+      0,
+    ];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(DragHandler);
+  },
+});
+
+import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
+
+function DragHandler(props) {
+  return (
+    <NodeViewWrapper class="draggable-item">
+      <div
+        className="drag-handle"
+        contenteditable="false"
+        draggable="true"
+        data-drag-handle
+        {...props}
+      />
+
+      <NodeViewContent class="content" />
+    </NodeViewWrapper>
   );
 }
